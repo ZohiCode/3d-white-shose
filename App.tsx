@@ -1,182 +1,173 @@
+
 import React, { useState } from 'react';
-import Experience from './components/Experience';
-import GeminiAssistant from './components/GeminiAssistant';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, Menu, MessageSquare, ChevronRight, ChevronLeft } from 'lucide-react';
-import { Product } from './types';
+import { Play, Share2 } from 'lucide-react';
+import { Header } from './components/Header';
+import { FloatingShoe } from './components/FloatingShoe';
+import { PRODUCTS } from './constants';
 
-// --- DATA: Product Catalog ---
-const PRODUCTS: Product[] = [
-    {
-        id: '1',
-        name: 'ZYRA ULTRA',
-        subtitle: 'VOLT GREEN EDITION',
-        price: '$240.00',
-        description: "Don't chase the go. Wear ZYRA. Standard fit with bioluminescent mesh technology.",
-        materialStyle: 'standard',
-        colorTheme: {
-            primary: '#39e75f', // Green
-            secondary: '#8fff00',
-            accent: '#39e75f',
-            bg: '#0a1a0f'
-        }
-    },
-    {
-        id: '2',
-        name: 'ZYRA MAGMA',
-        subtitle: 'CRIMSON CORE',
-        price: '$265.00',
-        description: "Forged in heat. The Magma edition features a full metallic chassis and reactive heat-map soles.",
-        materialStyle: 'metallic',
-        colorTheme: {
-            primary: '#ef4444', // Red
-            secondary: '#7f1d1d',
-            accent: '#b91c1c',
-            bg: '#1a0505'
-        }
-    },
-    {
-        id: '3',
-        name: 'ZYRA AZURE',
-        subtitle: 'DEEP OCEAN',
-        price: '$250.00',
-        description: "Pure transparency. Constructed from recycled ocean glass-polymer for a weightless feel.",
-        materialStyle: 'glass',
-        colorTheme: {
-            primary: '#0ea5e9', // Blue
-            secondary: '#bae6fd',
-            accent: '#0369a1',
-            bg: '#081826'
-        }
-    },
-    {
-        id: '4',
-        name: 'ZYRA PHANTOM',
-        subtitle: 'MIDNIGHT OPS',
-        price: '$280.00',
-        description: "Stealth mode engaged. Tactical wireframe weave for maximum breathability and zero weight.",
-        materialStyle: 'wireframe',
-        colorTheme: {
-            primary: '#ffffff', // White wireframe on black
-            secondary: '#333333',
-            accent: '#4b5563',
-            bg: '#000000'
-        }
-    }
-];
+const App: React.FC = () => {
+  const [index, setIndex] = useState(0);
+  const currentProduct = PRODUCTS[index];
+  const [selectedSize, setSelectedSize] = useState<string>('9');
 
-export default function App() {
-  const [isAiOpen, setIsAiOpen] = useState(false);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHoveringProduct, setIsHoveringProduct] = useState(false);
-
-  const currentProduct = PRODUCTS[currentIndex];
-
-  const changeProduct = (newIndex: number) => {
-    setCurrentIndex(newIndex);
+  const containerVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
-  const nextProduct = () => {
-    setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);
-  };
-
-  const prevProduct = () => {
-    setCurrentIndex((prev) => (prev - 1 + PRODUCTS.length) % PRODUCTS.length);
+  const itemVariants = {
+    initial: { opacity: 0, y: 30 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
   };
 
   return (
     <div 
-        className="relative w-full h-screen text-white overflow-hidden selection:bg-white selection:text-black transition-colors duration-1000"
-        style={{ backgroundColor: currentProduct.colorTheme.bg }}
+      className="min-h-screen w-full flex items-center justify-center p-4 md:p-8 transition-colors duration-1000 ease-in-out font-sans overflow-hidden"
+      style={{ backgroundColor: `${currentProduct.themeColor}15` }}
     >
-      
-      {/* 
-         3D SCROLL CANVAS 
-         This now occupies the entire background and handles the scrolling content 
-      */}
-      <div className="absolute inset-0 z-0">
-        <Experience active={isHoveringProduct} product={currentProduct} />
-      </div>
+      <motion.div 
+        layout
+        className="w-full max-w-[1440px] h-[85vh] rounded-[4rem] relative overflow-hidden flex flex-col shadow-[0_80px_160px_rgba(0,0,0,0.25)]"
+        style={{ backgroundColor: currentProduct.themeColor }}
+      >
+        <Header />
 
-      {/* 
-         FIXED UI LAYER 
-         Elements here stay on screen regardless of scroll position 
-      */}
-      <div className="absolute inset-0 z-50 pointer-events-none">
-        
-        {/* Navbar (Fixed Top) */}
-        <nav className="absolute top-0 w-full p-6 md:px-12 flex justify-between items-center pointer-events-auto bg-gradient-to-b from-black/50 to-transparent">
-            <div className="flex items-center gap-4">
-                <h1 className="text-3xl font-display tracking-widest text-white mix-blend-difference">ZYRA</h1>
-            </div>
-            
-            <div className="hidden md:flex gap-8 text-sm font-medium tracking-widest text-white/60">
-                {['NEW RELEASES', 'MEN', 'WOMEN', 'KIDS'].map((item) => (
-                    <a key={item} href="#" className="hover:text-white transition-colors duration-300">{item}</a>
+        <div className="flex-1 flex relative px-12 md:px-24 items-center">
+          
+          <motion.div 
+            key={`info-${currentProduct.id}`}
+            variants={containerVariants}
+            initial="initial"
+            animate="animate"
+            className="w-full md:w-2/5 z-20 space-y-12"
+          >
+            <motion.div variants={itemVariants}>
+              <span className="text-[11px] font-black tracking-[0.5em] uppercase opacity-50 block mb-6">Ultra-Modern 3D</span>
+              <h2 className="text-6xl md:text-8xl font-[1000] tracking-tighter leading-[0.85] mb-6 uppercase italic">
+                {currentProduct.name.split(' ').map((word, i) => (
+                  <span key={i} className="block">{word}</span>
                 ))}
-            </div>
+              </h2>
+              <div className="flex items-center space-x-8">
+                 <p className="text-5xl font-black">{currentProduct.price}</p>
+                 <div className="h-px w-12 bg-black opacity-20"></div>
+                 <span className="text-[12px] font-bold opacity-60">EXCLUSIVE ACCESS</span>
+              </div>
+            </motion.div>
 
-            <div className="flex gap-6 items-center">
-                <button 
-                    onClick={() => setIsAiOpen(true)}
-                    className="flex items-center gap-2 text-xs font-bold bg-white/10 hover:bg-white hover:text-black px-4 py-2 rounded-full transition-all backdrop-blur-sm border border-white/10"
-                >
-                    <MessageSquare className="w-3 h-3" />
-                    ASK AI
-                </button>
-                <div className="relative cursor-pointer group">
-                    <ShoppingBag className="w-6 h-6 text-white transition-colors" />
-                    <span 
-                        className="absolute -top-1 -right-1 w-3 h-3 rounded-full border-2 border-black"
-                        style={{ backgroundColor: currentProduct.colorTheme.primary }}
-                    ></span>
-                </div>
-                <Menu className="md:hidden w-6 h-6 text-white" />
-            </div>
-        </nav>
+            <motion.p variants={itemVariants} className="text-[15px] leading-relaxed max-w-[380px] font-medium opacity-70">
+              {currentProduct.description}
+            </motion.p>
 
-        {/* Product Carousel (Fixed Bottom) */}
-        <div className="absolute bottom-0 w-full z-50 pointer-events-auto pb-6 bg-gradient-to-t from-black/90 via-black/50 to-transparent pt-20">
-            <div className="max-w-7xl mx-auto px-6">
-                <div className="flex items-center justify-between mb-4 px-2">
-                    <span className="text-xs font-bold tracking-widest text-white/50">SELECT EDITION</span>
-                    <div className="flex gap-2">
-                        <button onClick={prevProduct} className="p-2 hover:bg-white/10 rounded-full transition-colors"><ChevronLeft className="w-4 h-4" /></button>
-                        <button onClick={nextProduct} className="p-2 hover:bg-white/10 rounded-full transition-colors"><ChevronRight className="w-4 h-4" /></button>
-                    </div>
-                </div>
+            <motion.div variants={itemVariants} className="flex space-x-6">
+              <button className="px-10 py-5 bg-black text-white rounded-2xl font-black text-[12px] tracking-widest uppercase hover:scale-105 transition-all shadow-xl">
+                Purchase Now
+              </button>
+              <button className="w-16 h-16 rounded-2xl border-2 border-black/10 flex items-center justify-center hover:bg-black/5 transition-all">
+                <Share2 size={20} />
+              </button>
+            </motion.div>
+          </motion.div>
 
-                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide snap-x">
-                    {PRODUCTS.map((prod, index) => (
-                        <div 
-                            key={prod.id} 
-                            onClick={() => changeProduct(index)}
-                            className={`
-                                relative min-w-[160px] h-20 rounded-lg border transition-all duration-300 cursor-pointer overflow-hidden group snap-center flex-shrink-0
-                                ${index === currentIndex ? 'border-white scale-100 bg-white/10' : 'border-white/10 scale-95 opacity-60 hover:opacity-100'}
-                            `}
-                            style={{ borderColor: index === currentIndex ? prod.colorTheme.primary : '' }}
-                        >
-                            <div className="absolute inset-0 p-3 flex flex-col justify-center z-10">
-                                <h4 className="font-display text-sm tracking-wide leading-none">{prod.name.split(' ')[1]}</h4>
-                                <span className="text-[10px] text-gray-400 mt-1">{prod.subtitle}</span>
-                            </div>
-                            
-                            {/* Glow Effect */}
-                            <div 
-                                className="absolute -right-2 -bottom-2 w-16 h-16 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"
-                                style={{ backgroundColor: prod.colorTheme.primary }}
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
+          {/* Dinamik 3D Sahne */}
+          <div className="absolute inset-0 z-10 pointer-events-none lg:pointer-events-auto">
+            <AnimatePresence mode="wait">
+               <FloatingShoe 
+                 key={currentProduct.id} 
+                 modelUrl={currentProduct.modelUrl} 
+                 themeColor={currentProduct.themeColor} 
+                 scale={currentProduct.modelScale}
+               />
+            </AnimatePresence>
+          </div>
+
+          <motion.div 
+            key={`controls-${currentProduct.id}`}
+            variants={containerVariants}
+            initial="initial"
+            animate="animate"
+            className="hidden lg:flex w-1/4 ml-auto z-20 flex-col items-end text-right space-y-20"
+          >
+            <motion.div variants={itemVariants} className="w-full max-w-[280px]">
+              <div className="flex justify-between items-center mb-8">
+                <h3 className="text-[11px] font-black tracking-widest uppercase opacity-60">Select Size</h3>
+                <span className="text-[10px] font-bold border-b border-black/20 pb-0.5 opacity-40 cursor-pointer">Guide</span>
+              </div>
+              <div className="grid grid-cols-4 gap-3">
+                {currentProduct.sizes.slice(0, 8).map(size => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`h-12 text-[12px] font-black rounded-xl border transition-all duration-500 ${
+                      selectedSize === size 
+                      ? 'bg-black text-white border-black shadow-xl scale-110' 
+                      : 'border-black/5 hover:border-black/20 bg-black/5'
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="w-full max-w-[280px]">
+              <h3 className="text-[11px] font-black tracking-widest uppercase opacity-60 mb-8 text-left">Switch Model</h3>
+              <div className="flex space-x-5">
+                {PRODUCTS.map((prod, i) => (
+                  <button
+                    key={prod.id}
+                    onClick={() => setIndex(i)}
+                    className={`group relative w-14 h-14 rounded-2xl transition-all duration-500 overflow-hidden ${
+                      index === i ? 'scale-125 shadow-2xl z-10 border-2 border-white' : 'opacity-40 hover:opacity-100 hover:scale-110'
+                    }`}
+                    style={{ backgroundColor: prod.themeColor }}
+                  >
+                    {index === i && (
+                      <motion.div 
+                        layoutId="active-ring" 
+                        className="absolute inset-0 border-4 border-black/10 pointer-events-none" 
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
 
-      </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="absolute bottom-10 left-24 flex items-center space-x-12 z-30"
+        >
+          <div className="flex -space-x-3">
+            {[1,2,3,4].map(i => (
+              <div key={i} className="w-10 h-10 rounded-full border-4 border-white/20 bg-black/20 overflow-hidden backdrop-blur-md">
+                <img src={`https://i.pravatar.cc/100?u=${i}`} alt="user" className="w-full h-full object-cover" />
+              </div>
+            ))}
+            <div className="w-10 h-10 rounded-full bg-black text-white text-[10px] flex items-center justify-center font-bold">+12k</div>
+          </div>
+          <p className="text-[10px] font-bold tracking-widest uppercase opacity-40">Viewing this collection</p>
+        </motion.div>
 
-      {/* AI Sidebar */}
-      <GeminiAssistant isOpen={isAiOpen} onClose={() => setIsAiOpen(false)} />
+        <motion.button 
+          whileHover={{ scale: 1.05 }}
+          className="absolute bottom-10 right-24 flex items-center space-x-4 group z-30"
+        >
+          <div className="flex flex-col items-end">
+            <span className="text-[10px] font-black tracking-widest uppercase opacity-40">Next Story</span>
+            <span className="text-[12px] font-black tracking-widest uppercase">The Heritage</span>
+          </div>
+          <div className="w-14 h-14 rounded-2xl bg-black/10 flex items-center justify-center border border-black/10 group-hover:bg-black group-hover:text-white transition-all shadow-lg">
+            <Play size={18} fill="currentColor" />
+          </div>
+        </motion.button>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default App;

@@ -1,5 +1,5 @@
 {
-  "name": "zyra---ultra-green-edition",
+  "name": "jordan-ultra-modern-3d-experience",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,15 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "three": "^0.182.0",
-    "react": "^19.2.3",
-    "@google/genai": "^1.33.0",
-    "framer-motion": "^12.23.26",
-    "@react-three/fiber": "^9.4.2",
-    "react-dom": "^19.2.3",
-    "@react-three/drei": "^10.7.7",
-    "lucide-react": "^0.561.0",
-    "@react-spring/three": "^10.0.3"
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "framer-motion": "11.11.17",
+    "lucide-react": "0.475.0",
+    "three": "0.173.0",
+    "@react-three/fiber": "9.0.0-rc.1",
+    "@react-three/drei": "9.121.4"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
