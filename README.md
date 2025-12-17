@@ -1,3 +1,6 @@
+<img width="973" height="633" alt="Screenshot 2025-12-17 at 20 18 39" src="https://github.com/user-attachments/assets/5b4cb163-95fc-4ee5-a999-c14a07525b59" />
+
+
 <div align="center">
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
